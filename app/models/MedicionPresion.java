@@ -1,0 +1,119 @@
+package models;
+/**
+ * Created by ja.troconis10 on 25/02/2017.
+ */
+
+import com.avaje.ebean.Model;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
+
+@Entity
+public class MedicionPresion extends Model {
+
+    public static final String NORMAL = "NORMAL";
+
+    public static final String PREHIPERTENSION = "PREHIPERTENSION";
+
+    public static final String HIPERTENSION_SIS_ALTA = "HIPERTENSION_SIS_ALTA";
+
+    public static final String ALTA = "HIPERTENSION_SIS_ALTA";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private int presionDiastolica;
+
+    private int presionSistolica;
+
+    private Date fecha;
+
+    private String estado;
+
+    public MedicionPresion(){
+
+    }
+
+    public MedicionPresion(int presionDiastolica, int presionSistolica, Date fecha) {
+        this.presionDiastolica = presionDiastolica;
+        this.presionSistolica = presionSistolica;
+        this.fecha = fecha;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the presionDiastolica
+     */
+    public int getPresionDiastolica() {
+        return presionDiastolica;
+    }
+
+    /**
+     * @param presionDiastolica the presionDiastolica to set
+     */
+    public void setPresionDiastolica(int presionDiastolica) {
+        this.presionDiastolica = presionDiastolica;
+    }
+
+    /**
+     * @return the presionSistolica
+     */
+    public int getPresionSistolica() {
+        return presionSistolica;
+    }
+
+    /**
+     * @param presionSistolica the presionSistolica to set
+     */
+    public void setPresionSistolica(int presionSistolica) {
+        this.presionSistolica = presionSistolica;
+    }
+
+    //Metodos auxiliares
+
+    public static MedicionPresion bind(JsonNode j){
+
+        Long fechaL = j.findPath("fecha").asLong();
+        Date fecha = new Date(fechaL);
+
+        int presionDiastolica = j.findPath("presionD").asInt();
+
+        int presionSistolica = j.findPath("presionS").asInt();
+
+        return new MedicionPresion(presionDiastolica, presionSistolica, fecha);
+    }
+}
