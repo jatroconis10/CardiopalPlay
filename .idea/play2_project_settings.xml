@@ -6,7 +6,7 @@
         <entry key="basic-project">
           <value>
             <ProjectSettingsEntry>
-              <option name="playDistrPath" value="$USER_HOME$/.ivy2/cache/com.typesafe.play/play_2.11/jars/play_2.11-2.4.2.jar" />
+              <option name="playDistrPath" value="$USER_HOME$/.ivy2/cache/com.typesafe.play/play_2.11/jars/play_2.11-2.5.12.jar" />
             </ProjectSettingsEntry>
           </value>
         </entry>
@@ -14,7 +14,7 @@
           <value>
             <ProjectSettingsEntry>
               <option name="sourceDir" value="C:\Users\JavierAntonio\Desktop\Cardiopal\app" />
-              <option name="confDir" value="C:\Users\JavierAntonio\Desktop\Cardiopal\app" />
+              <option name="confDir" value="C:\Users\ja.troconis10\IdeaProjects\CardiopalPlay\app" />
               <option name="templateImports">
                 <list>
                   <option value="models._" />
@@ -39,7 +39,7 @@
                   <option value="play.libs.F" />
                 </list>
               </option>
-              <option name="uri" value="/C:/Users/JavierAntonio/Desktop/Cardiopal" />
+              <option name="uri" value="/C:/Users/ja.troconis10/IdeaProjects/CardiopalPlay" />
             </ProjectSettingsEntry>
           </value>
         </entry>

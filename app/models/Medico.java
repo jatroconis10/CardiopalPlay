@@ -14,15 +14,17 @@ import javax.persistence.Id;
 @Entity
 public class Medico extends Model{
 
+    public static final Finder<Long, Medico> FINDER = new Finder<>(Medico.class);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String nombres;
+    private String nombres;
 
-    String apellidos;
+    private String apellidos;
 
-    TipoEspecializacion especializacion;
+    private TipoEspecializacion especializacion;
 
     public Medico(){
 

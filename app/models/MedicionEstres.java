@@ -6,10 +6,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +18,10 @@ import java.util.Map;
  */
 @Entity
 public class MedicionEstres extends Model{
+
+    public static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+    public static final Finder<Long, MedicionEstres> FINDER = new Finder<>(MedicionEstres.class);
 
     public enum NivelEstres {
         Bajo,
@@ -59,6 +62,9 @@ public class MedicionEstres extends Model{
 
     private Date fecha;
 
+    @ManyToOne
+    private Historial historial;
+
     public MedicionEstres(){
 
     }
@@ -92,12 +98,21 @@ public class MedicionEstres extends Model{
         this.fecha = fecha;
     }
 
+    public void setHistorial(Historial historial) {
+        this.historial = historial;
+    }
+
     //Metodos auxiliares
 
     public static MedicionEstres bind(JsonNode j){
 
-        Long fechaL = j.findPath("fecha").asLong();
-        Date fecha = new Date(fechaL);
+        String fechaS = j.findPath("fecha").asText();
+        Date fecha = null;
+        try {
+            fecha = format.parse(fechaS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         NivelEstres nivelEstres = NivelEstres.forValue(j.findPath("nivel").asText());
 
         return new MedicionEstres(nivelEstres, fecha);

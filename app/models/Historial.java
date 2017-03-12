@@ -1,10 +1,12 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,17 +20,21 @@ public class Historial extends Model{
     @Id
     Long id;
 
-    @OneToMany
-    List<MedicionFrecuencia> medicionesFrec;
+    @JsonIgnore
+    @OneToOne
+    private Paciente paciente;
 
-    @OneToMany
-    List<MedicionEstres> medicionesEstres;
+    @OneToMany(mappedBy = "historial")
+    private List<MedicionFrecuencia> medicionesFrec;
 
-    @OneToMany
-    List<MedicionPresion> medicionesPres;
+    @OneToMany(mappedBy = "historial")
+    private List<MedicionEstres> medicionesEstres;
 
-    @OneToMany
-    List<Entrada> entradas;
+    @OneToMany(mappedBy = "historial")
+    private List<MedicionPresion> medicionesPres;
+
+    @OneToMany(mappedBy = "historial")
+    private List<Entrada> entradas;
 
     public Historial(Long id){
 
@@ -38,6 +44,14 @@ public class Historial extends Model{
         medicionesPres = new LinkedList<>();
         entradas = new LinkedList<>();
 
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public Long getId() {
@@ -84,56 +98,16 @@ public class Historial extends Model{
 
     public void agregarMedicionEstres(MedicionEstres mE){
         medicionesEstres.add(mE);
+        mE.setHistorial(this);
     }
 
     public void agregarMedicionFrec(MedicionFrecuencia mF){
         medicionesFrec.add(mF);
+        mF.setHistorial(this);
     }
 
     public void agregarMedicionPres(MedicionPresion mP){
         medicionesPres.add(mP);
-    }
-
-    public ReporteMediciones darReporte(Date fechaI, Date fechaF){
-        return null;
-    }
-
-    private class ReporteMediciones{
-
-        private List<MedicionEstres> medicionesEstres;
-
-        private List<MedicionFrecuencia> medicionFrecuencias;
-
-        private List<MedicionPresion> medicionPresiones;
-
-        public ReporteMediciones(List<MedicionEstres> mE, List<MedicionFrecuencia> mF, List<MedicionPresion> mP){
-            medicionesEstres = mE;
-            medicionesFrec = mF;
-            medicionesPres = mP;
-        }
-
-        public List<MedicionEstres> getMedicionesEstres() {
-            return medicionesEstres;
-        }
-
-        public void setMedicionesEstres(List<MedicionEstres> pMedicionesEstres) {
-            medicionesEstres = pMedicionesEstres;
-        }
-
-        public List<MedicionFrecuencia> getMedicionFrecuencias() {
-            return medicionFrecuencias;
-        }
-
-        public void setMedicionFrecuencias(List<MedicionFrecuencia> pMedicionFrecuencias) {
-            medicionFrecuencias = pMedicionFrecuencias;
-        }
-
-        public List<MedicionPresion> getMedicionPresiones() {
-            return medicionPresiones;
-        }
-
-        public void setMedicionPresiones(List<MedicionPresion> pMedicionPresiones) {
-            medicionPresiones = pMedicionPresiones;
-        }
+        mP.setHistorial(this);
     }
 }

@@ -22,17 +22,20 @@ public class Paciente extends Model {
 
     private String apellidos;
 
-    @OneToOne
-    private Brazalete brazalete;
-
-    @OneToMany
+    @OneToMany(mappedBy = "paciente")
     private List<Cita> citas;
 
-    @OneToMany
+    @OneToMany(mappedBy = "paciente")
     private List<Consejo> consejos;
 
-    @OneToOne
+    @OneToOne(mappedBy = "paciente")
     private Historial historial;
+
+    @OneToOne(mappedBy = "paciente")
+    private Brazalete brazalete;
+
+    @OneToMany(mappedBy = "paciente")
+    private List<Emergencia> emergencias;
 
     //Auxiliar para consultas
     public static Finder<Long, Paciente> find = new Finder<>(Paciente.class);
@@ -105,7 +108,22 @@ public class Paciente extends Model {
         historial = pHistorial;
     }
 
+    public List<Emergencia> getEmergencias() {
+        return emergencias;
+    }
+
+    public void setEmergencias(List<Emergencia> emergencias) {
+        this.emergencias = emergencias;
+    }
+
     //Metodos Auxiliares
+
+    public void inicializarHistorial(){
+        if (historial == null){
+            this.historial = new Historial(id);
+            historial.setPaciente(this);
+        }
+    }
 
     public static Paciente bind(JsonNode j){
         String nombres = j.findPath("nombres").asText();

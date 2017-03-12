@@ -6,14 +6,16 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
 public class MedicionPresion extends Model {
+
+    public static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    public static final Finder<Long, MedicionPresion> FINDER = new Finder<>(MedicionPresion.class);
 
     public static final String NORMAL = "NORMAL";
 
@@ -35,6 +37,9 @@ public class MedicionPresion extends Model {
 
     private String estado;
 
+    @ManyToOne
+    private Historial historial;
+
     public MedicionPresion(){
 
     }
@@ -43,6 +48,10 @@ public class MedicionPresion extends Model {
         this.presionDiastolica = presionDiastolica;
         this.presionSistolica = presionSistolica;
         this.fecha = fecha;
+    }
+
+    public void setHistorial(Historial historial) {
+        this.historial = historial;
     }
 
     public Date getFecha() {
@@ -107,8 +116,13 @@ public class MedicionPresion extends Model {
 
     public static MedicionPresion bind(JsonNode j){
 
-        Long fechaL = j.findPath("fecha").asLong();
-        Date fecha = new Date(fechaL);
+        String fechaS = j.findPath("fecha").asText();
+        Date fecha = null;
+        try {
+            fecha = format.parse(fechaS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         int presionDiastolica = j.findPath("presionD").asInt();
 

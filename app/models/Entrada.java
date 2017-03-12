@@ -3,10 +3,7 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -19,9 +16,12 @@ public class Entrada extends Model {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    TipoEntrada tipo;
+    private TipoEntrada tipo;
 
-    String descripcion;
+    private String descripcion;
+
+    @ManyToOne
+    private Historial historial;
 
     public Entrada(){
 
@@ -30,6 +30,7 @@ public class Entrada extends Model {
     public Entrada(TipoEntrada tipo, String descripcion){
         this.descripcion = descripcion;
         this.tipo = tipo;
+        this.historial =historial;
 
     }
 
@@ -57,8 +58,11 @@ public class Entrada extends Model {
         this.descripcion = descripcion;
     }
 
+    public void setHistorial(Historial historial) {
+        this.historial = historial;
+    }
 
-    //Metodos auxiliares
+//Metodos auxiliares
 
     public static Entrada bind(JsonNode j){
 

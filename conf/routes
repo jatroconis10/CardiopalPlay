@@ -18,17 +18,31 @@ GET         /                       controllers.Application.index()
 ########################################################################################################################
 
 
-POST        /paciente              controllers.PacienteController.create()
+POST        /paciente                  controllers.PacienteController.create()
 
-GET         /paciente              controllers.PacienteController.read()
+GET         /paciente                  controllers.PacienteController.read()
 
-GET         /paciente/:id          controllers.PacienteController.get(id : Long)
+GET         /paciente/:id              controllers.PacienteController.get(id : Long)
 
-POST        /medico                controllers.MedicoController.create()
+POST        /paciente/:id/estres       controllers.PacienteController.addEstres(id : Long)
 
-GET         /medico                controllers.MedicoController.read()
+POST        /paciente/:id/frec         controllers.PacienteController.addFrec(id : Long)
 
-GET         /medico/:id            controllers.MedicoController.get(id : Long)
+POST        /paciente/:id/pres         controllers.PacienteController.addPresion(id : Long)
+
+POST        /paciente/:id/entrada      controllers.PacienteController.createEntrada(id:Long)
+
+GET         /paciente/:id/meds         controllers.PacienteController.darMedicionesEn(id:Long, fechaI:String ?= "01-01-2016 00:00:00", fechaF:String ?= "12-31-2070 00:00:00")
+
+POST        /medico                    controllers.MedicoController.create()
+
+GET         /medico                    controllers.MedicoController.read()
+
+GET         /medico/:id                controllers.MedicoController.get(id : Long)
+
+POST        /medico/:idM/consejo/:idP  controllers.MedicoController.darConsejo(idP:Long, idM:Long)
+
+POST        /paciente/:id/emergencia   controllers.EmergenciaController.create(id : Long)
 
 
 

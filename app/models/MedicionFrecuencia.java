@@ -3,10 +3,9 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -14,6 +13,9 @@ import java.util.Date;
  */
 @Entity
 public class MedicionFrecuencia extends Model {
+
+    public static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    public static final Finder<Long, MedicionFrecuencia> FINDER = new Finder<>(MedicionFrecuencia.class);
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -23,6 +25,9 @@ public class MedicionFrecuencia extends Model {
 
     private int latidosPMin;
 
+    @ManyToOne
+    private Historial historial;
+
     public MedicionFrecuencia(){
 
     }
@@ -30,6 +35,10 @@ public class MedicionFrecuencia extends Model {
     public MedicionFrecuencia(Date fecha, int latidosPMin){
         this.fecha = fecha;
         this.latidosPMin = latidosPMin;
+    }
+
+    public void setHistorial(Historial historial) {
+        this.historial = historial;
     }
 
     /**
@@ -66,8 +75,13 @@ public class MedicionFrecuencia extends Model {
 
     public static MedicionFrecuencia bind(JsonNode j){
 
-        Long fechaL = j.findPath("fecha").asLong();
-        Date fecha = new Date(fechaL);
+        String fechaS = j.findPath("fecha").asText();
+        Date fecha = null;
+        try {
+            fecha = format.parse(fechaS);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         int frec = j.findPath("latidosPMin").asInt();
 
