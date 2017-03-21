@@ -13,6 +13,10 @@ import play.mvc.Result;
 import scala.concurrent.ExecutionContext;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
@@ -42,12 +46,30 @@ public class EmergenciaController extends Controller {
             }
             else{
                 Emergencia e = Emergencia.bind(j);
-                p.getEmergencias().add(e);
                 e.setPaciente(p);
                 e.save();
                 return ok(Json.toJson(e));
             }
         });
 
+    }
+
+    public CompletionStage<Result> darEmergenciasEn( Long id, String fechaI, String fechaF) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        try {
+            Date fechaInit = format.parse(fechaI);
+            Date fechaFinal = format.parse(fechaF);
+            CompletionStage<List<Emergencia>> promiseE = CompletableFuture.supplyAsync(() -> {
+                return Emergencia.FINDER.where()
+                        .eq("paciente.id", id)
+                        .ge("fecha", fechaInit)
+                        .le("fecha", fechaFinal)
+                        .findList();
+            }, dbContext);
+            return promiseE.thenApply(pEmergencias -> ok(Json.toJson(pEmergencias)));
+        } catch (ParseException e) {
+            return CompletableFuture.supplyAsync(() -> badRequest("Formato de fecha incorrect"))
+                    .thenApply(pResult -> pResult);
+        }
     }
 }

@@ -29,7 +29,7 @@ create table emergencia (
   fecha                     timestamp,
   lat                       float,
   lon                       float,
-  paciente_id               bigint,
+  paciente_id               bigint not null,
   constraint pk_emergencia primary key (id))
 ;
 
@@ -53,7 +53,7 @@ create table medicion_estres (
   id                        bigserial not null,
   nivel_estres              integer,
   fecha                     timestamp,
-  historial_id              bigint,
+  historial_id              bigint not null,
   constraint ck_medicion_estres_nivel_estres check (nivel_estres in (0,1,2)),
   constraint pk_medicion_estres primary key (id))
 ;
@@ -62,7 +62,7 @@ create table medicion_frecuencia (
   id                        bigserial not null,
   fecha                     timestamp,
   latidos_pmin              integer,
-  historial_id              bigint,
+  historial_id              bigint not null,
   constraint pk_medicion_frecuencia primary key (id))
 ;
 
@@ -72,7 +72,7 @@ create table medicion_presion (
   presion_sistolica         integer,
   fecha                     timestamp,
   estado                    varchar(255),
-  historial_id              bigint,
+  historial_id              bigint not null,
   constraint pk_medicion_presion primary key (id))
 ;
 

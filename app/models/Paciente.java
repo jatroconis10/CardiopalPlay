@@ -34,7 +34,6 @@ public class Paciente extends Model {
     @OneToOne(mappedBy = "paciente")
     private Brazalete brazalete;
 
-    @OneToMany(mappedBy = "paciente")
     private List<Emergencia> emergencias;
 
     //Auxiliar para consultas
@@ -106,10 +105,6 @@ public class Paciente extends Model {
 
     public void setHistorial(Historial pHistorial) {
         historial = pHistorial;
-    }
-
-    public List<Emergencia> getEmergencias() {
-        return emergencias;
     }
 
     public void setEmergencias(List<Emergencia> emergencias) {

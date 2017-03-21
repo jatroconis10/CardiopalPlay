@@ -16,6 +16,8 @@ public class Emergencia extends Model {
 
     public static final SimpleDateFormat format = new SimpleDateFormat("dd-M-yyyy HH:mm:ss");
 
+    public static final Finder<Long, Emergencia> FINDER = new Finder(Emergencia.class);
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +28,7 @@ public class Emergencia extends Model {
 
     private Double lon;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Paciente paciente;
 
     public Emergencia(){
