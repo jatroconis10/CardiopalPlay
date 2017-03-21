@@ -24,13 +24,10 @@ public class Historial extends Model{
     @OneToOne
     private Paciente paciente;
 
-    @OneToMany(mappedBy = "historial")
     private List<MedicionFrecuencia> medicionesFrec;
 
-    @OneToMany(mappedBy = "historial")
     private List<MedicionEstres> medicionesEstres;
 
-    @OneToMany(mappedBy = "historial")
     private List<MedicionPresion> medicionesPres;
 
     @OneToMany(mappedBy = "historial")

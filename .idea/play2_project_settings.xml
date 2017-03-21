@@ -13,8 +13,8 @@
         <entry key="root">
           <value>
             <ProjectSettingsEntry>
-              <option name="sourceDir" value="C:\Users\JavierAntonio\Desktop\Cardiopal\app" />
-              <option name="confDir" value="C:\Users\ja.troconis10\IdeaProjects\CardiopalPlay\app" />
+              <option name="sourceDir" value="C:\Users\ja.troconis10\IdeaProjects\CardiopalPlay\app" />
+              <option name="confDir" value="C:\Users\JavierAntonio\git\CardiopalPlay\app" />
               <option name="templateImports">
                 <list>
                   <option value="models._" />
@@ -39,7 +39,7 @@
                   <option value="play.libs.F" />
                 </list>
               </option>
-              <option name="uri" value="/C:/Users/ja.troconis10/IdeaProjects/CardiopalPlay" />
+              <option name="uri" value="/C:/Users/JavierAntonio/git/CardiopalPlay" />
             </ProjectSettingsEntry>
           </value>
         </entry>

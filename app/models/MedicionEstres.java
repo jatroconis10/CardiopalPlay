@@ -62,7 +62,7 @@ public class MedicionEstres extends Model{
 
     private Date fecha;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Historial historial;
 
     public MedicionEstres(){

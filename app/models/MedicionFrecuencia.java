@@ -25,7 +25,7 @@ public class MedicionFrecuencia extends Model {
 
     private int latidosPMin;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Historial historial;
 
     public MedicionFrecuencia(){

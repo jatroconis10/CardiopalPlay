@@ -37,7 +37,7 @@ public class MedicionPresion extends Model {
 
     private String estado;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Historial historial;
 
     public MedicionPresion(){
