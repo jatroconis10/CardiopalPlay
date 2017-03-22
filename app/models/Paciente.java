@@ -1,6 +1,7 @@
 package models;
 
 import com.avaje.ebean.Model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Paciente extends Model {
     @OneToMany(mappedBy = "paciente")
     private List<Consejo> consejos;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "paciente")
     private Historial historial;
 

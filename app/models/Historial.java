@@ -17,6 +17,8 @@ import java.util.List;
 @Entity
 public class Historial extends Model{
 
+    public static final Finder<Long, Historial> FINDER = new Finder<>(Historial.class);
+
     @Id
     Long id;
 
