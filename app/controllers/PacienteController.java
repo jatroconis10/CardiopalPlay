@@ -194,4 +194,16 @@ public class PacienteController extends Controller {
                 });
     }
 
+    public CompletionStage<Result> darEntradas(Long id){
+        return CompletableFuture.supplyAsync(() -> Historial.FINDER.byId(id),dbContext)
+                .thenApply(historial -> {
+                    if(historial == null){
+                        return notFound("No existe ese historiañ");
+                    }
+                    else{
+                        return ok(Json.toJson(historial.getEntradas()));
+                    }
+                });
+    }
+
 }

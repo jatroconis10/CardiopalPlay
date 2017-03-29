@@ -17,6 +17,8 @@ import java.util.List;
 @Entity
 public class Historial extends Model{
 
+    public static final Finder<Long, Historial> FINDER = new Finder<>(Historial.class);
+
     @Id
     Long id;
 
@@ -94,17 +96,17 @@ public class Historial extends Model{
     //Metodos Auxiliares
 
     public void agregarMedicionEstres(MedicionEstres mE){
-        medicionesEstres.add(mE);
+
         mE.setHistorial(this);
     }
 
     public void agregarMedicionFrec(MedicionFrecuencia mF){
-        medicionesFrec.add(mF);
+
         mF.setHistorial(this);
     }
 
     public void agregarMedicionPres(MedicionPresion mP){
-        medicionesPres.add(mP);
+
         mP.setHistorial(this);
     }
 }

@@ -34,6 +34,8 @@ POST        /paciente/:id/entrada      controllers.PacienteController.createEntr
 
 GET         /paciente/:id/meds         controllers.PacienteController.darMedicionesEn(id:Long, fechaI:String ?= "01-01-2016 00:00:00", fechaF:String ?= "12-31-2070 00:00:00")
 
+GET         /paciente/:id/historial    controllers.PacienteController.darEntradas(id:Long)
+
 POST        /medico                    controllers.MedicoController.create()
 
 GET         /medico                    controllers.MedicoController.read()
@@ -44,7 +46,7 @@ POST        /medico/:idM/consejo/:idP  controllers.MedicoController.darConsejo(i
 
 POST        /paciente/:id/emergencia   controllers.EmergenciaController.create(id : Long)
 
-GET         /paciente/:id/emergencia  controllers.EmergenciaController.darEmergenciasEn(id:Long, fechaI:String ?= "01-01-2016 00:00:00", fechaF:String ?= "12-31-2070 00:00:00")
+GET         /paciente/:id/emergencia   controllers.EmergenciaController.darEmergenciasEn(id:Long, fechaI:String ?= "01-01-2016 00:00:00", fechaF:String ?= "12-31-2070 00:00:00")
 
 
 # Map static resources from the /public folder to the /assets URL path
