@@ -1,28 +1,28 @@
 [
     {
-        "id": "7a8fae21.959d3",
+        "id": "1a255a37.005246",
         "type": "tab",
         "label": "Telemetry Flow"
     },
     {
-        "id": "cecb1979.0877c8",
+        "id": "af8c23cb.aa2bc",
         "type": "serial in",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "HeartMonitorSensor",
-        "serial": "b76247f5.dfaed8",
+        "serial": "ee13ce32.b4cfd",
         "x": 141.00000762939453,
         "y": 304.8000431060791,
         "wires": [
             [
-                "99e86c2a.4845a",
-                "6ac0551a.2c360c"
+                "d1c013a5.4b78e",
+                "29c28a9e.c17e26"
             ]
         ]
     },
     {
-        "id": "a893d5a8.d0c108",
+        "id": "aee03132.63d7b",
         "type": "inject",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "heartRateTime",
         "topic": "heartRateTime",
         "payload": "",
@@ -34,15 +34,15 @@
         "y": 611.8000364303589,
         "wires": [
             [
-                "70f196d9.9d8c08",
-                "35ee0e89.b1f332"
+                "22d6ae18.8e9592",
+                "77bc66d1.5adb38"
             ]
         ]
     },
     {
-        "id": "35ee0e89.b1f332",
+        "id": "77bc66d1.5adb38",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "formatTime",
         "func": "var res = {};\nvar date = new Date(msg.payload);\n\nvar month = date.getMonth()+1;\nvar mes = \"\";\nif(month < 10){\nmes = \"0\"+month;\n}\nres.payload = \"\"+ date.getDate() + \"-\" + (mes)+\"-\"+date.getFullYear() + \" \" + (date.getHours()+1) + \":\"+date.getMinutes()+\":\"+date.getSeconds();\nres.topic = msg.topic;\n\nreturn res;",
         "outputs": 1,
@@ -51,17 +51,17 @@
         "y": 602.9999809265137,
         "wires": [
             [
-                "b285aa4d.371178",
-                "f59394f4.6bd8f8",
-                "a2a0e7ab.f83668",
-                "fda7c254.9089"
+                "7af6e46e.22cc5c",
+                "8869109e.c15d3",
+                "68ada863.aa0a38",
+                "feb15541.19cb38"
             ]
         ]
     },
     {
-        "id": "99e86c2a.4845a",
+        "id": "d1c013a5.4b78e",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "formatHeartRate",
         "func": "var res = {};\nvar res1 = {};\nvar res2 = {};\nvar heartArray = [];\n\nheartString = msg.payload;\nheartArray = heartString.split(\"\\t\");\nres.topic = \"bodyHeart\";\nres.payload = parseInt(heartArray[0]);\nres1.topic = \"presionHeart\";\nres1.payload = [parseInt(heartArray[1]),parseInt(heartArray[2])];\nres2.topic = \"bodyStress\";\nres2.payload =parseInt(heartArray[3]);\nreturn [res,res1,res2];",
         "outputs": "3",
@@ -70,21 +70,21 @@
         "y": 373.0000190734863,
         "wires": [
             [
-                "994aa38d.684ac",
-                "f59394f4.6bd8f8"
+                "9cb8bbc8.731768",
+                "8869109e.c15d3"
             ],
             [
-                "a2a0e7ab.f83668"
+                "68ada863.aa0a38"
             ],
             [
-                "fda7c254.9089"
+                "feb15541.19cb38"
             ]
         ]
     },
     {
-        "id": "6ac0551a.2c360c",
+        "id": "29c28a9e.c17e26",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "before format",
         "active": false,
         "console": "false",
@@ -94,9 +94,9 @@
         "wires": []
     },
     {
-        "id": "70f196d9.9d8c08",
+        "id": "22d6ae18.8e9592",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "before format",
         "active": false,
         "console": "false",
@@ -106,9 +106,9 @@
         "wires": []
     },
     {
-        "id": "994aa38d.684ac",
+        "id": "9cb8bbc8.731768",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after format",
         "active": false,
         "console": "false",
@@ -118,9 +118,9 @@
         "wires": []
     },
     {
-        "id": "b285aa4d.371178",
+        "id": "7af6e46e.22cc5c",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after format",
         "active": false,
         "console": "false",
@@ -130,26 +130,26 @@
         "wires": []
     },
     {
-        "id": "f59394f4.6bd8f8",
+        "id": "8869109e.c15d3",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "mergeMessages",
-        "func": "context.data = context.data || {};\n\nswitch (msg.topic) {\n    case \"heartRateTime\":\n        context.data.fecha = msg.payload;\n        msg = null;\n        break;\n    case \"bodyHeart\":\n        context.data.latidosPMin = msg.payload;\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n}\n\nif(context.data.fecha != null && context.data.latidosPMin != null) {\n\tres = {};\n    res.payload = JSON.stringify(context.data);\n    res.topic = \"bodyHeart\"\n    context.data = null;\n\treturn res;\n}",
+        "func": "var cryptojs = context.global.cryptojs;\ncontext.data = context.data || {};\n\nswitch (msg.topic) {\n    case \"heartRateTime\":\n        context.data.fecha = msg.payload;\n        msg = null;\n        break;\n    case \"bodyHeart\":\n        context.data.latidosPMin = msg.payload;\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n}\n\nif(context.data.fecha != null && context.data.latidosPMin != null) {\n\tres = {};\n\tcontext.data.hashData = cryptojs.SHA256(\"\" + context.data.fecha + context.data.latidosPMin);\n    res.payload = JSON.stringify(context.data);\n    res.topic = \"bodyHeart\"\n    context.data = null;\n\treturn res;\n}",
         "outputs": 1,
         "noerr": 0,
         "x": 787.7002639770508,
         "y": 247.00000762939453,
         "wires": [
             [
-                "28aecbd8.b1e7f4",
-                "b5022a73.669d18"
+                "c8b95882.77cba8",
+                "47f48090.9ae7f"
             ]
         ]
     },
     {
-        "id": "28aecbd8.b1e7f4",
+        "id": "c8b95882.77cba8",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after merge",
         "active": false,
         "console": "false",
@@ -159,70 +159,70 @@
         "wires": []
     },
     {
-        "id": "a2a0e7ab.f83668",
+        "id": "68ada863.aa0a38",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "mergeMessages",
-        "func": "context.data = context.data || {};\n\nswitch (msg.topic) {\n    case \"heartRateTime\":\n        context.data.fecha = msg.payload;\n        msg = null;\n        break;\n    case \"presionHeart\":\n        context.data.presionS = msg.payload[0];\n        context.data.presionD = msg.payload[1];\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n}\n\nif(context.data.fecha != null && context.data.presionS != null && context.data.presionD != null) {\n\tres = {};\n    res.payload =res.payload = JSON.stringify(context.data);\n    res.topic = \"presionHeart\"\n    context.data = null;\n\treturn res;\n}",
+        "func": "var cryptojs = context.global.cryptojs;\ncontext.data = context.data || {};\n\nswitch (msg.topic) {\n    case \"heartRateTime\":\n        context.data.fecha = msg.payload;\n        msg = null;\n        break;\n    case \"presionHeart\":\n        context.data.presionS = msg.payload[0];\n        context.data.presionD = msg.payload[1];\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n}\n\nif(context.data.fecha != null && context.data.presionS != null && context.data.presionD != null) {\n\tres = {};\n\tcontext.data.hashData = cryptojs.SHA256(\"\" + context.data.fecha + context.data.presionS + context.data.presionD);\n    res.payload =res.payload = JSON.stringify(context.data);\n    res.topic = \"presionHeart\"\n    context.data = null;\n\treturn res;\n}",
         "outputs": 1,
         "noerr": 0,
         "x": 788.2002410888672,
         "y": 416.20001220703125,
         "wires": [
             [
-                "ca7a237b.660a4",
-                "515ddda6.9cc414"
+                "77d213f5.9d5acc",
+                "40ac4b7a.e7c4a4"
             ]
         ]
     },
     {
-        "id": "fda7c254.9089",
+        "id": "feb15541.19cb38",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "mergeMessages",
-        "func": "context.data = context.data || {};\n\nswitch (msg.topic) {\n    case \"heartRateTime\":\n        context.data.fecha = msg.payload;\n        msg = null;\n        break;\n    case \"bodyStress\":\n        context.data.nivel = msg.payload;\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n}\n\nif(context.data.fecha != null && context.data.nivel != null) {\n\tres = {};\n    res.payload = JSON.stringify(context.data);\n    res.topic = \"bodyStress\"\n    context.data = null;\n\treturn res;\n}",
+        "func": "var cryptojs = context.global.cryptojs;\ncontext.data = context.data || {};\n\nswitch (msg.topic) {\n    case \"heartRateTime\":\n        context.data.fecha = msg.payload;\n        msg = null;\n        break;\n    case \"bodyStress\":\n        context.data.nivel = msg.payload;\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n}\n\nif(context.data.fecha != null && context.data.nivel != null) {\n\tres = {};\n\tcontext.data.hashData = cryptojs.SHA256(\"\" + context.data.fecha + context.data.nivel);\n    res.payload = JSON.stringify(context.data);\n    res.topic = \"bodyStress\"\n    context.data = null;\n\treturn res;\n}",
         "outputs": 1,
         "noerr": 0,
         "x": 782.2000198364258,
         "y": 638.1999893188477,
         "wires": [
             [
-                "71b16932.9dbd78",
-                "a7cd7d18.a8a1d"
+                "6f2dd80b.02eb68",
+                "518780d8.394cf"
             ]
         ]
     },
     {
-        "id": "39d1e810.04b128",
+        "id": "e7a6a953.7175c8",
         "type": "http response",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "http create paciente/1/pres",
         "x": 1377.2998886108398,
         "y": 282.200008392334,
         "wires": []
     },
     {
-        "id": "44b0a551.102efc",
+        "id": "e54131ff.2e41a",
         "type": "http response",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "http create paciente/1/frec",
         "x": 1361.5001702308655,
         "y": 506.200008392334,
         "wires": []
     },
     {
-        "id": "1c006067.b0b0c",
+        "id": "e8c1c1ce.40251",
         "type": "http response",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "http create paciente/1/estres",
         "x": 1451.799949645996,
         "y": 729.6001167297363,
         "wires": []
     },
     {
-        "id": "a767ccec.5c8bd",
+        "id": "f1b291e7.9bc67",
         "type": "http in",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "POST paciente/1/frec",
         "url": "localhost:9000/paciente/1/frec",
         "method": "post",
@@ -231,15 +231,15 @@
         "y": 335.0000343322754,
         "wires": [
             [
-                "7b0ad21.6fa2f2c",
-                "f59394f4.6bd8f8"
+                "a9a0a675.e7e788",
+                "8869109e.c15d3"
             ]
         ]
     },
     {
-        "id": "5b612144.2425c",
+        "id": "6785009.f3071",
         "type": "http in",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "POST paciente/1/pres",
         "url": "localhost:9000/paciente/1/pres",
         "method": "post",
@@ -248,15 +248,15 @@
         "y": 512.999927520752,
         "wires": [
             [
-                "aef0046c.91ec38",
-                "a2a0e7ab.f83668"
+                "a9752db0.555cc",
+                "68ada863.aa0a38"
             ]
         ]
     },
     {
-        "id": "1403593f.cf8db7",
+        "id": "3830a5c6.91811a",
         "type": "http in",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "POST paciente/1/estres",
         "url": "localhost:9000/paciente/1/estres",
         "method": "post",
@@ -265,15 +265,15 @@
         "y": 754.999993801117,
         "wires": [
             [
-                "6f388e91.6e7a7",
-                "fda7c254.9089"
+                "87b3a0f.8b5966",
+                "feb15541.19cb38"
             ]
         ]
     },
     {
-        "id": "7b0ad21.6fa2f2c",
+        "id": "a9a0a675.e7e788",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "Content Type",
         "func": "msg.headers = {\"Content-Type\":\"application/json\"};\nreturn msg;",
         "outputs": 1,
@@ -282,14 +282,14 @@
         "y": 302.0000333786011,
         "wires": [
             [
-                "39d1e810.04b128"
+                "e7a6a953.7175c8"
             ]
         ]
     },
     {
-        "id": "aef0046c.91ec38",
+        "id": "a9752db0.555cc",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "Content Type",
         "func": "msg.headers = {\"Content-Type\":\"application/json\"};\nreturn msg;",
         "outputs": 1,
@@ -298,14 +298,14 @@
         "y": 513.3999586105347,
         "wires": [
             [
-                "44b0a551.102efc"
+                "e54131ff.2e41a"
             ]
         ]
     },
     {
-        "id": "6f388e91.6e7a7",
+        "id": "87b3a0f.8b5966",
         "type": "function",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "Content Type",
         "func": "msg.headers = {\"Content-Type\":\"application/json\"};\nreturn msg;",
         "outputs": 1,
@@ -314,14 +314,14 @@
         "y": 726.9999933242798,
         "wires": [
             [
-                "1c006067.b0b0c"
+                "e8c1c1ce.40251"
             ]
         ]
     },
     {
-        "id": "ca7a237b.660a4",
+        "id": "77d213f5.9d5acc",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after merge",
         "active": true,
         "console": "false",
@@ -331,9 +331,9 @@
         "wires": []
     },
     {
-        "id": "71b16932.9dbd78",
+        "id": "6f2dd80b.02eb68",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after merge",
         "active": false,
         "console": "false",
@@ -343,22 +343,22 @@
         "wires": []
     },
     {
-        "id": "515ddda6.9cc414",
+        "id": "40ac4b7a.e7c4a4",
         "type": "json",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "",
         "x": 1006.0999984741211,
         "y": 439.800012588501,
         "wires": [
             [
-                "30961241.5eb70e"
+                "54515100.332"
             ]
         ]
     },
     {
-        "id": "30961241.5eb70e",
+        "id": "54515100.332",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after format",
         "active": true,
         "console": "false",
@@ -368,22 +368,22 @@
         "wires": []
     },
     {
-        "id": "b5022a73.669d18",
+        "id": "47f48090.9ae7f",
         "type": "json",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "",
         "x": 1002.5999755859375,
         "y": 256.6000061035156,
         "wires": [
             [
-                "97d34d7c.c679f"
+                "fd53f215.13d5b"
             ]
         ]
     },
     {
-        "id": "97d34d7c.c679f",
+        "id": "fd53f215.13d5b",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after format",
         "active": true,
         "console": "false",
@@ -393,22 +393,22 @@
         "wires": []
     },
     {
-        "id": "a7cd7d18.a8a1d",
+        "id": "518780d8.394cf",
         "type": "json",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "",
         "x": 988.5999755859375,
         "y": 642.5999755859375,
         "wires": [
             [
-                "795a4910.367278"
+                "bde0592.98e00a8"
             ]
         ]
     },
     {
-        "id": "795a4910.367278",
+        "id": "bde0592.98e00a8",
         "type": "debug",
-        "z": "7a8fae21.959d3",
+        "z": "1a255a37.005246",
         "name": "after format",
         "active": true,
         "console": "false",
@@ -418,7 +418,7 @@
         "wires": []
     },
     {
-        "id": "b76247f5.dfaed8",
+        "id": "ee13ce32.b4cfd",
         "type": "serial-port",
         "z": "",
         "serialport": "COM3",

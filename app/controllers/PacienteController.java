@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
 import play.libs.Json;
 import play.mvc.*;
+import security.IntegrityException;
 import utils.ReporteMediciones;
 
 import javax.inject.Inject;
@@ -72,14 +73,18 @@ public class PacienteController extends Controller {
                 return notFound("Paciente no encontrado");
             }
             else {
-                MedicionEstres mE = MedicionEstres.bind(j);
-                if(p.getHistorial() == null){
-                    p.inicializarHistorial();
-                    p.getHistorial().save();
+                try {
+                    MedicionEstres mE = MedicionEstres.bind(j);
+                    if (p.getHistorial() == null) {
+                        p.inicializarHistorial();
+                        p.getHistorial().save();
+                    }
+                    p.getHistorial().agregarMedicionEstres(mE);
+                    mE.save();
+                    return ok(Json.toJson(mE));
+                }catch (IntegrityException e){
+                    return badRequest();
                 }
-                p.getHistorial().agregarMedicionEstres(mE);
-                mE.save();
-                return ok(Json.toJson(mE));
             }
         });
 
@@ -94,14 +99,19 @@ public class PacienteController extends Controller {
                 return notFound("Paciente no encontrado");
             }
             else {
-                MedicionPresion mP = MedicionPresion.bind(j);
-                if(p.getHistorial() == null){
-                    p.inicializarHistorial();
-                    p.getHistorial().save();
+                try {
+                    MedicionPresion mP = MedicionPresion.bind(j);
+                    if (p.getHistorial() == null) {
+                        p.inicializarHistorial();
+                        p.getHistorial().save();
+                    }
+                    p.getHistorial().agregarMedicionPres(mP);
+                    mP.save();
+                    return ok(Json.toJson(mP));
                 }
-                p.getHistorial().agregarMedicionPres(mP);
-                mP.save();
-                return ok(Json.toJson(mP));
+                catch(IntegrityException e){
+                    return badRequest();
+                }
             }
         });
     }
@@ -115,14 +125,19 @@ public class PacienteController extends Controller {
                 return notFound("Paciente no encontrado");
             }
             else {
-                MedicionFrecuencia mF = MedicionFrecuencia.bind(j);
-                if(p.getHistorial() == null){
-                    p.inicializarHistorial();
-                    p.getHistorial().save();
+                try {
+                    MedicionFrecuencia mF = MedicionFrecuencia.bind(j);
+                    if (p.getHistorial() == null) {
+                        p.inicializarHistorial();
+                        p.getHistorial().save();
+                    }
+                    p.getHistorial().agregarMedicionFrec(mF);
+                    mF.save();
+                    return ok(Json.toJson(mF));
                 }
-                p.getHistorial().agregarMedicionFrec(mF);
-                mF.save();
-                return ok(Json.toJson(mF));
+                catch (IntegrityException e){
+                    return badRequest();
+                }
             }
         });
     }

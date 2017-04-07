@@ -2,6 +2,8 @@ package models;
 
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
+import security.IntegrityException;
+import security.IntegrityVerifier;
 
 import javax.persistence.*;
 import java.text.ParseException;
@@ -73,9 +75,18 @@ public class MedicionFrecuencia extends Model {
 
     //Metodos auxiliares
 
-    public static MedicionFrecuencia bind(JsonNode j){
+    public static MedicionFrecuencia bind(JsonNode j) throws IntegrityException{
 
         String fechaS = j.findPath("fecha").asText();
+        String frecStr = j.findPath("latidosPMin").asText();
+
+        String hashData = j.findPath("hashData").asText();
+        String hashCompare = fechaS + frecStr;
+
+        if(!IntegrityVerifier.verifySHA256(hashData, hashCompare)){
+            throw new IntegrityException();
+        }
+
         Date fecha = null;
         try {
             fecha = format.parse(fechaS);
