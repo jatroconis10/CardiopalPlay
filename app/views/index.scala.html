@@ -1,7 +1,13 @@
-@(message: String)
+@import models.User
+@(title: String, maybeUser: Optional[User])
 
-@main("Welcome to Play") {
+@main(title, maybeUser) {
+    @if(maybeUser.isPresent) {
+        @defining(maybeUser.get) { user =>
+            <p>Hello @user.getName</p>
+        }
+    }
 
-    @play20.welcome(message, style = "Java")
-
+    <p>This content is only visible to authenticated users.</p>
+    <p><a href="@controllers.routes.AuthController.logOut()">Log out</a></p>
 }

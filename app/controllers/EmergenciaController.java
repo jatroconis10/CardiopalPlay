@@ -1,6 +1,8 @@
 package controllers;
 
 import akka.actor.ActorSystem;
+import be.objectify.deadbolt.java.actions.Group;
+import be.objectify.deadbolt.java.actions.Restrict;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Emergencia;
@@ -34,6 +36,7 @@ public class EmergenciaController extends Controller {
     }
 
     @BodyParser.Of(BodyParser.Json.class)
+    @Restrict(@Group("Sensores"))
     public CompletionStage<Result> create(Long id){
 
         JsonNode j = Controller.request().body().asJson();
@@ -53,7 +56,7 @@ public class EmergenciaController extends Controller {
         });
 
     }
-
+    @Restrict({@Group("Medicos"),@Group("Pacientes"),@Group("Cardiologo")})
     public CompletionStage<Result> darEmergenciasEn( Long id, String fechaI, String fechaF) {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         try {
