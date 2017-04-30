@@ -45,8 +45,8 @@ public class MyDeadboltHandler implements DeadboltHandler {
     }
 
     @Override
-    public F.Promise<Optional<Result>> beforeAuthCheck(final Http.Context context) {
-        return F.Promise.pure(Optional.empty());
+    public CompletionStage<Optional<Result>> beforeAuthCheck(final Http.Context context) {
+        return CompletableFuture.completedFuture(Optional.empty());
     }
 
     @Override
@@ -73,8 +73,8 @@ public class MyDeadboltHandler implements DeadboltHandler {
     }
 
     @Override
-    public F.Promise<Optional<DynamicResourceHandler>> getDynamicResourceHandler(final Http.Context context) {
-        return F.Promise.pure(Optional.empty());
+    public CompletionStage<Optional<DynamicResourceHandler>> getDynamicResourceHandler(final Http.Context context) {
+        return CompletableFuture.completedFuture(Optional.empty());
     }
 
     @Override

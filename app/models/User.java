@@ -3,9 +3,12 @@ package models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import be.objectify.deadbolt.core.models.Permission;
-import be.objectify.deadbolt.core.models.Role;
-import be.objectify.deadbolt.core.models.Subject;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import be.objectify.deadbolt.java.models.Permission;
+import be.objectify.deadbolt.java.models.Role;
+import be.objectify.deadbolt.java.models.Subject;
 
 /**
  * A very simple implementation of {@link Subject}.
@@ -25,10 +28,15 @@ public class User implements Subject {
                 String roles) {
         this.userId = userId;
         this.name = name;
-        roles.split(",");
-        Rol rol = new Rol("roles");
-        this.roles = new ArrayList<Rol>();
-        this.roles.add(rol);
+
+        this.roles = new ArrayList<>();
+        Pattern p = Pattern.compile("\"([^\"]*)\"");
+        Matcher m = p.matcher(roles);
+        while (m.find()) {
+            Rol rol = new Rol(m.group(1));
+            this.roles.add(rol);
+            System.out.println(rol.getName());
+        }
         this.image = image;
     }
 

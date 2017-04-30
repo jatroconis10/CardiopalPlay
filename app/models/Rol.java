@@ -1,6 +1,6 @@
 package models;
 
-import be.objectify.deadbolt.core.models.Role;
+import be.objectify.deadbolt.java.models.Role;
 
 /**
  * Created by ja.troconis10 on 29/04/2017.

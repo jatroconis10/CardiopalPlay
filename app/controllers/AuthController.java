@@ -2,11 +2,11 @@ package controllers;
 
 import javax.inject.Inject;
 
-import be.objectify.deadbolt.core.models.Role;
+import be.objectify.deadbolt.java.models.Role;
 import models.Rol;
 import models.User;
 import play.libs.concurrent.HttpExecutionContext;
-import play.libs.ws.WS;
+import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import security.Auth0ConfigKeys;
 import security.AuthSupport;
@@ -42,6 +42,8 @@ public class AuthController extends Controller {
 
     @Inject
     HttpExecutionContext ec;
+    @Inject
+    WSClient ws;
     @Inject
     public AuthController(final AuthSupport authSupport,
                           final CacheApi cache,
@@ -85,7 +87,7 @@ public class AuthController extends Controller {
                                                                userAndToken._2._2);
                                                        return redirect(routes.Application.index());
                                                    },ec.current()))
-                                            .orElse(F.Promise.pure(badRequest("No parameters supplied")));    }
+                                            .orElse(CompletableFuture.completedFuture(badRequest("No parameters supplied")));    }
 
     /**
      * Get the user token from Auth0, using the code we received earlier.
@@ -105,7 +107,7 @@ public class AuthController extends Controller {
                  code);
         root.put("grant_type",
                  "authorization_code");
-        return WS.url(String.format("https://%s/oauth/token",
+        return ws.url(String.format("https://%s/oauth/token",
                                     this.domain))
                  .setHeader(Http.HeaderNames.ACCEPT,
                             Http.MimeTypes.JSON)
@@ -122,15 +124,15 @@ public class AuthController extends Controller {
      */
     private CompletionStage<F.Tuple<User, F.Tuple<String, String>>> getUser(final F.Tuple<String, String> token) {
         List<? extends Role> roles = new ArrayList<Rol>();
-        return WS.url(String.format("https://%s/userinfo",
+        return ws.url(String.format("https://%s/userinfo",
                 this.domain))
                 .setQueryParameter("access_token",
                         token._2)
                 .get()
                 .thenApplyAsync(WSResponse::asJson)
                 .thenApplyAsync(json -> new User(json.get("user_id").asText(),
-                        json.get("name").asText(),
-                        json.get("picture").asText(),json.get("roles").asText()))
+                        json.get("email").toString(),
+                        json.get("picture").asText(),json.get("roles").toString()))
                 .thenApplyAsync(localUser -> new F.Tuple<>(localUser,
                         token));
     }

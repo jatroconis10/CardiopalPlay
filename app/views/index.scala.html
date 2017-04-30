@@ -5,6 +5,7 @@
     @if(maybeUser.isPresent) {
         @defining(maybeUser.get) { user =>
             <p>Hello @user.getName</p>
+          <p>Roles: @user.getRoles</p>
         }
     }
 
