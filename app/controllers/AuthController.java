@@ -10,7 +10,6 @@ import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import security.Auth0ConfigKeys;
 import security.AuthSupport;
-import views.html.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.Configuration;
 import play.cache.CacheApi;
@@ -20,6 +19,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import views.html.*;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
