@@ -15,6 +15,8 @@ public class Consejo extends Model{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public static final Finder<Long, Consejo> FINDER = new Finder<>(Consejo.class);
+
     private String descripcion;
 
     @ManyToOne

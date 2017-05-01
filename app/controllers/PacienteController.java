@@ -221,4 +221,36 @@ public class PacienteController extends Controller {
                 });
     }
 
+    public CompletionStage<Result> getConsejo( Long idP, Long idC) {
+        CompletionStage<List<Consejo>> promiseC = CompletableFuture.supplyAsync(() -> {
+            return Consejo.FINDER.where()
+                    .eq("paciente.id", idP)
+                    .eq("id", idC)
+                    .findList();
+        }, dbContext);
+        return promiseC.thenApply(consejo -> {
+            ObjectNode result = Json.newObject();
+            if (consejo == null)
+                return ok(Json.toJson(result));
+            else {
+                return ok(Json.toJson(consejo));
+            }
+        });
+    }
+
+    public CompletionStage<Result> getConsejos( Long idP) {
+        CompletionStage<List<Consejo>> promiseC = CompletableFuture.supplyAsync(() -> {
+            return Consejo.FINDER.where()
+                    .eq("paciente.id", idP)
+                    .findList();
+        }, dbContext);
+        return promiseC.thenApply(consejo -> {
+            ObjectNode result = Json.newObject();
+            if (consejo == null)
+                return ok(Json.toJson(result));
+            else {
+                return ok(Json.toJson(consejo));
+            }
+        });
+    }
 }

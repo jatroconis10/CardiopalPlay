@@ -3,11 +3,11 @@ package controllers;
 import be.objectify.deadbolt.java.actions.SubjectPresent;
 import play.libs.concurrent.HttpExecutionContext;
 import security.AuthSupport;
-import views.html.index;
 import com.google.inject.Inject;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
+import views.html.index;
 
 import java.util.concurrent.CompletableFuture;
 

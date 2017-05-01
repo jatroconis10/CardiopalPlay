@@ -48,7 +48,7 @@ public class MyAuthorizedRoutes extends AuthorizedRoutes {
                         filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(SENSORES)))),
                 new AuthorizedRoute(POST,
                         "/paciente/$id<[^/]+>/entrada",
-                        filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(SENSORES)))),
+                        filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(MEDICO)))),
                 new AuthorizedRoute(GET,
                         "/paciente/$id<[^/]+>/meds",
                         filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(MEDICO),allOf(PACIENTE)))),
