@@ -16,15 +16,24 @@
         <div id="root">
             Log-in area
         </div>
-        <script src="https://cdn.auth0.com/js/lock-7.12.min.js"></script>
+        <script src="http://cdn.auth0.com/js/lock/10.15.1/lock.min.js"></script>
         <script>
-                var lock = new Auth0Lock('@clientId', '@domain');
-                lock.show({
-                    container: 'root',
-                    callbackURL: '@redirectUri',
-                    responseType: 'code',
-                    authParams: { scope: 'openid profile' }
-                });
+            var options = {
+              language:'es',
+                languageDictionary: {
+                    title: "Cardiopal"
+                },
+                theme: {
+                    logo:"https://s3.mzstatic.com/us/r30/Purple/v4/fb/5c/44/fb5c44dc-ba5d-b63e-1caf-5e2fdd009b0b/mzl.deqxayva.png"
+                },
+                auth: {
+                    redirect:true,
+                    redirectUrl: "@redirectUri",
+                    params: { scope: 'openid profile' }
+                }
+            };
+                var lock = new Auth0Lock('@clientId', '@domain',options);
+                lock.show();
         </script>
     </body>
 

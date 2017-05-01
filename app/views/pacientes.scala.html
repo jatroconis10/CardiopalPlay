@@ -1,0 +1,13 @@
+@(pacientes:List[Paciente])
+
+@main("Pacientes") {
+    <em>Listado de pacientes:</em>
+    <ul>
+    @for(paciente <- pacientes) {
+        <li>@paciente.getNombres()</li>
+        <li>@paciente.getApellidos()</li>
+        <li>@paciente.getId()</li>
+
+    }
+    </ul>
+}
