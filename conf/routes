@@ -36,10 +36,6 @@ GET         /paciente/:id/meds         controllers.PacienteController.darMedicio
 
 GET         /paciente/:id/historial    controllers.PacienteController.darEntradas(id:Long)
 
-PUT         /paciente/:id/historial  controllers.MedicoController.updateHistorial(id:Long,historial:Historial)
-
-DELETE      /paciente/:id/historial  controllers.MedicoController.deleteHistorial(id:Long,idH:Long)
-
 POST        /medico                    controllers.MedicoController.create()
 
 GET         /medico                    controllers.MedicoController.read()
