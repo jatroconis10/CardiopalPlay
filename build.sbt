@@ -12,13 +12,16 @@ routesGenerator := InjectedRoutesGenerator
 crossScalaVersions := Seq("2.10.4", "2.11.7")
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava, PlayEbean)
+// Resolver is needed only for SNAPSHOT versions
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
 libraryDependencies ++= Seq(
   "org.slf4j"               % "slf4j-log4j12"    % "1.7.5",
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.scalacheck" %% "scalacheck" % "1.11.5" % "test",
   "org.postgresql" % "postgresql" % "9.4.1212",
-  jdbc,
+  "com.adrianhurt" %% "play-bootstrap" % "1.1-P25-B3",
+    jdbc,
   javaJpa,
   cache,
   javaWs,
