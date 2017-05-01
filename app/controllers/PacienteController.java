@@ -253,4 +253,48 @@ public class PacienteController extends Controller {
             }
         });
     }
+
+    public CompletionStage<Result> crearMarcapasos( Long idPaciente, String marca, Long config){
+        JsonNode j = Controller.request().body().asJson();
+        return CompletableFuture.supplyAsync(() -> Paciente.find.byId(idPaciente),dbContext)
+                .thenApply(paciente -> {
+                    if(paciente == null){
+                        return notFound("No existe el paciente");
+                    }
+                    else{
+                        Marcapasos m = Marcapasos.bind(j);
+                        paciente.setMarcapasos(m);
+                        m.setPaciente(paciente);
+                        m.save();
+                        return ok(Json.toJson(m));
+                    }
+                });
+    }
+
+    public CompletionStage<Result> modificarMarcapasos( Long idPaciente, Long config){
+        JsonNode j = Controller.request().body().asJson();
+        return CompletableFuture.supplyAsync(() -> Paciente.find.byId(idPaciente),dbContext)
+                .thenApply(paciente -> {
+                    if(paciente == null){
+                        return notFound("No existe el paciente");
+                    }
+                    else{
+                        Marcapasos m = paciente.getMarcapasos();
+                        if(m != null){
+                           m.modificarConfiguracion(config);
+                           m.save();
+                           return ok(Json.toJson(m));
+                        }
+                        else{
+                            return notFound("El paciente no tiene un marcapaso");
+                        }
+                    }
+                });
+    }
+
+    public CompletionStage<Result> readMarcapasos() {
+        CompletionStage<List<Marcapasos>> promiseList = CompletableFuture.supplyAsync( () -> Marcapasos.FINDER.all(), dbContext);
+        return promiseList.thenApply( marcapasoss -> ok(Json.toJson(marcapasoss)));
+
+    }
 }

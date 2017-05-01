@@ -36,6 +36,8 @@ public class Paciente extends Model {
     @OneToOne(mappedBy = "paciente")
     private Brazalete brazalete;
 
+    private Marcapasos marcapasos;
+
     private List<Emergencia> emergencias;
 
     //Auxiliar para consultas
@@ -111,6 +113,14 @@ public class Paciente extends Model {
 
     public void setEmergencias(List<Emergencia> emergencias) {
         this.emergencias = emergencias;
+    }
+
+    public Marcapasos getMarcapasos() {
+        return marcapasos;
+    }
+
+    public void setMarcapasos(Marcapasos marcapasos) {
+        this.marcapasos = marcapasos;
     }
 
     //Metodos Auxiliares
