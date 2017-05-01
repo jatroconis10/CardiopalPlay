@@ -46,7 +46,7 @@ POST        /medico/:idM/consejo/:idP  controllers.MedicoController.darConsejo(i
 
 GET         /paciente/:idP/consejo/idC controllers.PacienteController.getConsejo(idP:Long, idC:Long)
 
-GET         /paciente/idP/consejo      controllers.PAcienteController.getConsejos(idP:Long)
+GET         /paciente/idP/consejo      controllers.PacienteController.getConsejos(idP:Long)
 
 POST        /paciente/:id/emergencia   controllers.EmergenciaController.create(id : Long)
 
