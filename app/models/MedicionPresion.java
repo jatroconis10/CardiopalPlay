@@ -4,13 +4,8 @@ package models;
  */
 
 import com.avaje.ebean.Model;
-import com.avaje.ebeaninternal.server.lib.util.Str;
-import com.fasterxml.jackson.databind.JsonNode;
-import security.IntegrityException;
-import security.IntegrityVerifier;
 
 import javax.persistence.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -115,31 +110,4 @@ public class MedicionPresion extends Model {
         this.presionSistolica = presionSistolica;
     }
 
-    //Metodos auxiliares
-
-    public static MedicionPresion bind(JsonNode j) throws IntegrityException{
-
-        String fechaS = j.findPath("fecha").asText();
-        String presionDStr = j.findPath("presionD").asText();
-        String presionSStr = j.findPath("presionS").asText();
-
-        String hashData = j.findPath("hashData").asText();
-        String hashCompare = fechaS + presionSStr + presionDStr;
-
-        if(!IntegrityVerifier.verifySHA256(hashData, hashCompare)){
-            throw new IntegrityException();
-        }
-        Date fecha = null;
-        try {
-            fecha = format.parse(fechaS);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int presionDiastolica = j.findPath("presionD").asInt();
-
-        int presionSistolica = j.findPath("presionS").asInt();
-
-        return new MedicionPresion(presionDiastolica, presionSistolica, fecha);
-    }
 }

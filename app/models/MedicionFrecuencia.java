@@ -1,13 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.databind.JsonNode;
-import security.IntegrityException;
-import security.IntegrityVerifier;
 
 import javax.persistence.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -16,7 +11,6 @@ import java.util.Date;
 @Entity
 public class MedicionFrecuencia extends Model {
 
-    public static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     public static final Finder<Long, MedicionFrecuencia> FINDER = new Finder<>(MedicionFrecuencia.class);
 
     @Id
@@ -73,30 +67,4 @@ public class MedicionFrecuencia extends Model {
         this.latidosPMin = latidosPMin;
     }
 
-    //Metodos auxiliares
-
-    public static MedicionFrecuencia bind(JsonNode j) throws IntegrityException{
-
-        String fechaS = j.findPath("fecha").asText();
-        String frecStr = j.findPath("latidosPMin").asText();
-
-        String hashData = j.findPath("hashData").asText();
-        String hashCompare = fechaS + frecStr;
-
-        if(!IntegrityVerifier.verifySHA256(hashData, hashCompare)){
-            throw new IntegrityException();
-        }
-
-        Date fecha = null;
-        try {
-            fecha = format.parse(fechaS);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int frec = j.findPath("latidosPMin").asInt();
-
-        return new MedicionFrecuencia(fecha, frec);
-
-    }
 }

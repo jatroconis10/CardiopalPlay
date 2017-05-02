@@ -12,6 +12,7 @@ import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.MedicoBuilder;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -36,7 +37,7 @@ public class MedicoController extends Controller {
     @BodyParser.Of(BodyParser.Json.class)
     public Result create() {
         JsonNode j = Controller.request().body().asJson();
-        Medico medico = Medico.bind(j);
+        Medico medico = MedicoBuilder.buildMedico(j);
         medico.save();
         return ok(Json.toJson(medico));
     }
