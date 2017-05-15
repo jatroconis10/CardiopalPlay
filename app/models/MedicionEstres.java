@@ -3,13 +3,8 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
-import security.IntegrityException;
-import security.IntegrityVerifier;
-
 import javax.persistence.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -104,31 +99,4 @@ public class MedicionEstres extends Model{
         this.historial = historial;
     }
 
-    //Metodos auxiliares
-
-    public static MedicionEstres bind(JsonNode j) throws IntegrityException{
-
-        String fechaS = j.findPath("fecha").asText();
-        String nvEstres = j.findPath("nivel").asText();
-
-        String hashData = j.findPath("hashData").asText();
-        String hashCompare = fechaS + nvEstres;
-
-        if(!IntegrityVerifier.verifySHA256(hashData, hashCompare)){
-            throw new IntegrityException();
-        }
-
-        NivelEstres nivelEstres = NivelEstres.forValue(nvEstres);
-
-        Date fecha = null;
-        try {
-            fecha = format.parse(fechaS);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        return new MedicionEstres(nivelEstres, fecha);
-
-    }
 }

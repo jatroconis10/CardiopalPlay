@@ -9,7 +9,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.*;
-import security.IntegrityException;
+import utils.MedicionFactory;
 import utils.ReporteMediciones;
 
 import javax.inject.Inject;
@@ -82,13 +82,12 @@ public class PacienteController extends Controller {
         JsonNode j = Controller.request().body().asJson();
 
         CompletionStage<Paciente> promisePac = CompletableFuture.supplyAsync(() -> new Model.Finder<Long, Paciente>(Paciente.class).byId(id), dbContext);
-        return promisePac.thenApply((p) -> {
+        return promisePac.thenApply(p -> {
             if(p == null){
                 return notFound("Paciente no encontrado");
             }
             else {
-                try {
-                    MedicionEstres mE = MedicionEstres.bind(j);
+                    MedicionEstres mE = MedicionFactory.createMedEstres(j);
                     if (p.getHistorial() == null) {
                         p.inicializarHistorial();
                         p.getHistorial().save();
@@ -96,9 +95,6 @@ public class PacienteController extends Controller {
                     p.getHistorial().agregarMedicionEstres(mE);
                     mE.save();
                     return ok(Json.toJson(mE));
-                }catch (IntegrityException e){
-                    return badRequest();
-                }
             }
         });
 
@@ -108,24 +104,19 @@ public class PacienteController extends Controller {
     public CompletionStage<Result> addPresion(Long id){
         JsonNode j = Controller.request().body().asJson();
         CompletionStage<Paciente> promisePac = CompletableFuture.supplyAsync(() -> new Model.Finder<Long, Paciente>(Paciente.class).byId(id), dbContext);
-        return promisePac.thenApply((p) -> {
+        return promisePac.thenApply(p -> {
             if(p == null){
                 return notFound("Paciente no encontrado");
             }
             else {
-                try {
-                    MedicionPresion mP = MedicionPresion.bind(j);
-                    if (p.getHistorial() == null) {
-                        p.inicializarHistorial();
-                        p.getHistorial().save();
-                    }
-                    p.getHistorial().agregarMedicionPres(mP);
-                    mP.save();
-                    return ok(Json.toJson(mP));
+                MedicionPresion mP = MedicionFactory.createMedPresion(j);
+                if (p.getHistorial() == null) {
+                    p.inicializarHistorial();
+                    p.getHistorial().save();
                 }
-                catch(IntegrityException e){
-                    return badRequest();
-                }
+                p.getHistorial().agregarMedicionPres(mP);
+                mP.save();
+                return ok(Json.toJson(mP));
             }
         });
     }
@@ -139,19 +130,14 @@ public class PacienteController extends Controller {
                 return notFound("Paciente no encontrado");
             }
             else {
-                try {
-                    MedicionFrecuencia mF = MedicionFrecuencia.bind(j);
-                    if (p.getHistorial() == null) {
-                        p.inicializarHistorial();
-                        p.getHistorial().save();
-                    }
-                    p.getHistorial().agregarMedicionFrec(mF);
-                    mF.save();
-                    return ok(Json.toJson(mF));
+                MedicionFrecuencia mF = MedicionFactory.createMedFrec(j);
+                if (p.getHistorial() == null) {
+                    p.inicializarHistorial();
+                    p.getHistorial().save();
                 }
-                catch (IntegrityException e){
-                    return badRequest();
-                }
+                p.getHistorial().agregarMedicionFrec(mF);
+                mF.save();
+                return ok(Json.toJson(mF));
             }
         });
     }
@@ -268,7 +254,8 @@ public class PacienteController extends Controller {
         });
     }
 
-    public CompletionStage<Result> crearMarcapasos( Long idPaciente, String marca, Long config){
+    @BodyParser.Of(BodyParser.Json.class)
+    public CompletionStage<Result> crearMarcapasos( Long idPaciente){
         JsonNode j = Controller.request().body().asJson();
         return CompletableFuture.supplyAsync(() -> Paciente.find.byId(idPaciente),dbContext)
                 .thenApply(paciente -> {
@@ -286,7 +273,6 @@ public class PacienteController extends Controller {
     }
 
     public CompletionStage<Result> modificarMarcapasos( Long idPaciente, Long config){
-        JsonNode j = Controller.request().body().asJson();
         return CompletableFuture.supplyAsync(() -> Paciente.find.byId(idPaciente),dbContext)
                 .thenApply(paciente -> {
                     if(paciente == null){

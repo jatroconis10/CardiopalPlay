@@ -1,7 +1,8 @@
 package models;
 
 import com.avaje.ebean.Model;
-import com.fasterxml.jackson.databind.JsonNode;
+import utils.MedicoBuilder;
+import utils.MedicoBuilder.TipoEspecializacion;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,10 +25,13 @@ public class Medico extends Model{
 
     private String apellidos;
 
+    private boolean permMarcapasos;
+
     private TipoEspecializacion especializacion;
 
-    public Medico(){
-
+    public Medico(String nombres, String apellidos){
+        this .nombres= nombres;
+        this.apellidos=apellidos;
     }
 
     public Medico(String nombres, String apellidos, TipoEspecializacion especializacion){
@@ -68,16 +72,12 @@ public class Medico extends Model{
         this.especializacion = especializacion;
     }
 
-    //Metodos Auxiliares
-
-    public static Medico bind(JsonNode j){
-
-        String nombres = j.findPath("nombres").asText();
-        String apellidos= j.findPath("apellidos").asText();
-
-        TipoEspecializacion especializacion = TipoEspecializacion.forValue(j.findPath("tipo").asText());
-
-        return new Medico(nombres, apellidos, especializacion);
-
+    public boolean isPermMarcapasos() {
+        return permMarcapasos;
     }
+
+    public void setPermMarcapasos(boolean permMarcapasos) {
+        this.permMarcapasos = permMarcapasos;
+    }
+
 }
