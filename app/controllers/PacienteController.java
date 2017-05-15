@@ -5,6 +5,8 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.*;
 import security.IntegrityException;
@@ -19,6 +21,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 
+import views.html.pacienteCrear;
+import views.html.pacientes;
+
 /**
  * Created by JavierAntonio on 3/4/2017.
  */
@@ -27,26 +32,35 @@ public class PacienteController extends Controller {
     private final Executor dbContext;
 
     @Inject
-    public PacienteController(ActorSystem system){
-        dbContext = system.dispatchers().lookup("db-context");
+    public PacienteController(ActorSystem system) {
+        this.dbContext = system.dispatchers().lookup("db-context");
     }
 
-    @BodyParser.Of(BodyParser.Json.class)
-    public CompletionStage<Result> create() {
-        JsonNode j = Controller.request().body().asJson();
-        Paciente paciente = Paciente.bind(j);
+    @Inject
+    FormFactory formFactory;
 
+
+    public Result formulario(){
+        final Form<Paciente> form = formFactory.form(Paciente.class);
+        return ok(pacienteCrear.render(form));
+    }
+
+    public CompletionStage<Result> create() {
+        final Form<Paciente> form = formFactory.form(Paciente.class);
+        Form<Paciente> completedForm = form.bindFromRequest();
+        Paciente paciente = completedForm.get();
         return CompletableFuture.supplyAsync(() -> {
             paciente.save();
-            return paciente;
-        }, dbContext).thenApply(pac -> ok(Json.toJson(pac))
+            return new Model.Finder<Long, Paciente>(Paciente.class).all();
+        }, dbContext).thenApply(pac -> ok(pacientes.render("Lista de Pacientes",pac))
         );
     }
 
+
+
     public CompletionStage<Result> read() {
         CompletionStage<List<Paciente>> promiseList = CompletableFuture.supplyAsync( () -> new Model.Finder<Long, Paciente>(Paciente.class).all(), dbContext);
-        return promiseList.thenApply( pacientes -> ok(Json.toJson(pacientes)));
-
+        return promiseList.thenApply( pacientess -> ok(pacientes.render("Lista de Pacientes",pacientess)));
     }
 
     public CompletionStage<Result> get(Long id) {

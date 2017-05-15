@@ -1,0 +1,14 @@
+@import play.data.Form
+
+@(myForm: Form[Paciente])
+
+@import helper._
+@main("Formulario paciente",null){
+@helper.form(action = routes.PacienteController.create()) {
+    @helper.inputText(myForm("nombres"))
+
+    @helper.inputText(myForm("apellidos"))
+
+    <input type = "submit" class = "btn-primary" value = "Send">
+}
+}

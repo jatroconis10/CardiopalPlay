@@ -34,6 +34,8 @@ POST        /paciente/:id/entrada      controllers.PacienteController.createEntr
 
 GET         /paciente/:id/meds         controllers.PacienteController.darMedicionesEn(id:Long, fechaI:String ?= "01-01-2016 00:00:00", fechaF:String ?= "12-31-2070 00:00:00")
 
+GET         /pacientes/formulario      controllers.PacienteController.formulario()
+
 GET         /paciente/:id/historial    controllers.PacienteController.darEntradas(id:Long)
 
 POST        /medico                    controllers.MedicoController.create()
@@ -52,9 +54,9 @@ POST        /paciente/:id/emergencia   controllers.EmergenciaController.create(i
 
 GET         /paciente/:id/emergencia   controllers.EmergenciaController.darEmergenciasEn(id:Long, fechaI:String ?= "01-01-2016 00:00:00", fechaF:String ?= "12-31-2070 00:00:00")
 
-POST        /paiente/:id/marcapasos/:marca/:config    controllers.PacienteController.crearMarcapasos(id:Long, marca:String, config:Long)
+POST        /paciente/:id/marcapasos/:marca/:config    controllers.PacienteController.crearMarcapasos(id:Long, marca:String, config:Long)
 
-PUT         /paiente/:id/marcapasos/:config           controllers.PacienteController.modificarMarcapasos(id:Long, config:Long)
+PUT         /paciente/:id/marcapasos/:config           controllers.PacienteController.modificarMarcapasos(id:Long, config:Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file           controllers.Assets.versioned(path="/public", file: Asset)
