@@ -21,8 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
 
-import views.html.pacienteCrear;
-import views.html.pacientes;
+import views.html.*;
 
 /**
  * Created by JavierAntonio on 3/4/2017.
@@ -43,6 +42,11 @@ public class PacienteController extends Controller {
     public Result formulario(){
         final Form<Paciente> form = formFactory.form(Paciente.class);
         return ok(pacienteCrear.render(form));
+    }
+    public Result formMarcapasos(Long id){
+        final Form<Marcapasos> form = formFactory.form(Marcapasos.class);
+        Paciente pac = new Model.Finder<Long,Paciente>(Paciente.class).byId(id);
+        return ok(marcapasosCrear.render("",pac, form));
     }
 
     public CompletionStage<Result> create() {
@@ -67,12 +71,13 @@ public class PacienteController extends Controller {
 
         CompletionStage<Paciente> promisePaciente = CompletableFuture.supplyAsync( () -> Paciente.find.byId(id)
         , dbContext);
-        return promisePaciente.thenApply(paciente -> {
+        return promisePaciente.thenApply(pac -> {
             ObjectNode result = Json.newObject();
-            if(paciente == null)
+            if(pac == null)
                 return ok(Json.toJson(result));
             else {
-                return ok(Json.toJson(paciente));
+                final Form<Entrada> form = formFactory.form(Entrada.class);
+                return ok(paciente.render("",pac, form));
             }
         });
     }
@@ -169,6 +174,7 @@ public class PacienteController extends Controller {
                         .le("fecha",fechaFinal)
                         .findList();
             },dbContext);
+            Paciente pac = new Model.Finder<Long, Paciente>(Paciente.class).byId(id);
 
              return promiseE.thenAcceptBoth( promiseF, (medicionEstres, medicionFrecuencias) -> {
                 reporteMediciones.setMedicionesEstres(medicionEstres);
@@ -176,7 +182,7 @@ public class PacienteController extends Controller {
             }).thenCombine(promiseP, (aVoid, medicionPresions) -> {
                 reporteMediciones.setMedicionPresiones(medicionPresions);
                 return reporteMediciones;
-            }).thenApply(reporteMediciones1 -> ok(Json.toJson(reporteMediciones)));
+            }).thenApply(reporteMediciones1 -> ok(alertas.render("",pac,reporteMediciones1)));
 
 
         }catch (ParseException e){
@@ -187,24 +193,25 @@ public class PacienteController extends Controller {
 
     }
 
-    @BodyParser.Of(BodyParser.Json.class)
     public CompletionStage<Result> createEntrada(Long id){
-        JsonNode j = Controller.request().body().asJson();
+        final Form<Entrada> form = formFactory.form(Entrada.class);
+        Form<Entrada> completedForm = form.bindFromRequest();
+        Entrada e = completedForm.get();
         return CompletableFuture.supplyAsync(() -> Paciente.find.byId(id),dbContext)
-                .thenApply(paciente -> {
-                    if(paciente == null){
+                .thenApply(pac -> {
+                    if(pac == null){
                         return notFound("No existe el paciente");
                     }
                     else{
-                        Entrada e = Entrada.bind(j);
-                        if(paciente.getHistorial() == null){
-                            paciente.inicializarHistorial();
-                            paciente.getHistorial().save();
+                        if(pac.getHistorial() == null){
+                            pac.inicializarHistorial();
+                            pac.getHistorial().save();
                         }
-                        e.setHistorial(paciente.getHistorial());
-                        paciente.getHistorial().getEntradas().add(e);
+                        e.setHistorial(pac.getHistorial());
+                        pac.getHistorial().getEntradas().add(e);
                         e.save();
-                        return ok(Json.toJson(e));
+                        final Form<Entrada> forma = formFactory.form(Entrada.class);
+                        return ok(paciente.render("",pac,forma));
                     }
                 });
     }
@@ -216,7 +223,7 @@ public class PacienteController extends Controller {
                         return notFound("No existe ese historiañ");
                     }
                     else{
-                        return ok(Json.toJson(historial.getEntradas()));
+                        return ok(entradas.render("",new Model.Finder<Long,Paciente>(Paciente.class).byId(id),historial.getEntradas()));
                     }
                 });
     }
@@ -290,6 +297,46 @@ public class PacienteController extends Controller {
                         }
                     }
                 });
+    }
+
+    @BodyParser.Of(BodyParser.Json.class)
+    public CompletionStage<Result> crearCita( Long idPaciente){
+        JsonNode j = Controller.request().body().asJson();
+        return CompletableFuture.supplyAsync(() -> Paciente.find.byId(idPaciente),dbContext)
+                .thenApply(paciente -> {
+                    if(paciente == null){
+                        return notFound("No existe el paciente");
+                    }
+                    else{
+                        Cita m = Cita.bind(j);
+                        paciente.getCitas().add(m);
+                        paciente.setCitas(paciente.getCitas());
+                        m.setPaciente(paciente);
+                        m.save();
+                        return ok(Json.toJson(m));
+                    }
+                });
+    }
+    public CompletionStage<Result> readCitas() {
+        CompletionStage<List<Cita>> promiseList = CompletableFuture.supplyAsync( () -> Cita.FINDER.all(), dbContext);
+        return promiseList.thenApply( marcapasoss -> ok(citas.render("",marcapasoss)));
+
+    }
+
+    public CompletionStage<Result> getCitas( Long idP) {
+        CompletionStage<List<Cita>> promiseC = CompletableFuture.supplyAsync(() -> {
+            return Cita.FINDER.where()
+                    .eq("paciente.id", idP)
+                    .findList();
+        }, dbContext);
+        return promiseC.thenApply(cita -> {
+            ObjectNode result = Json.newObject();
+            if (cita == null)
+                return ok(Json.toJson(result));
+            else {
+                return ok(Json.toJson(cita));
+            }
+        });
     }
 
     public CompletionStage<Result> readMarcapasos() {

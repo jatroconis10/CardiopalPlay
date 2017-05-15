@@ -3,6 +3,7 @@ package models;
 import com.avaje.ebean.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import controllers.PacienteController;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Paciente extends Model {
     private String nombres;
 
     private String apellidos;
+    private String sexo;
 
     @OneToMany(mappedBy = "paciente")
     private List<Cita> citas;
@@ -57,6 +59,9 @@ public class Paciente extends Model {
 
     public Long getId() {
         return id;
+    }
+    public String getSexo(){
+        return sexo;
     }
 
     public void setId(Long id) {

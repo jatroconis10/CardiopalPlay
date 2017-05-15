@@ -5,14 +5,19 @@ import com.avaje.ebean.Model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Consejo;
+import models.Entrada;
 import models.Medico;
 import models.Paciente;
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.MedicoBuilder;
+import views.html.consejoCrear;
+import views.html.paciente;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
@@ -29,6 +34,8 @@ public class MedicoController extends Controller {
     @Inject
     HttpExecutionContext ec;
 
+    @Inject
+    FormFactory formFactory;
     @Inject
     public MedicoController(ActorSystem system){
         dbContext = system.dispatchers().lookup("db-context");
@@ -56,33 +63,34 @@ public class MedicoController extends Controller {
             return ok(Json.toJson(Medico));
         }
     }
-
-    @BodyParser.Of(BodyParser.Json.class)
-    public CompletionStage<Result> darConsejo(Long idP, Long idM){
-
-        JsonNode j = Controller.request().body().asJson();
-        CompletionStage<Medico> promiseM = CompletableFuture.supplyAsync(() ->
-            Medico.FINDER.byId(idM)
-        ,dbContext);
-
-        CompletionStage<Paciente> promiseP = CompletableFuture.supplyAsync( () ->
-            Paciente.find.byId(idP)
-        ,dbContext);
-        return promiseM.thenCombine(promiseP, (medico, paciente) -> {
-            if(medico == null){
-                return notFound("Usted no es un medico registrado");
-            }
-            else if(paciente == null){
-                return notFound("El paciente no fue encontrado");
-            }
-            else{
-                Consejo c = Consejo.bind(j);
-                c.setPaciente(paciente);
-                c.setMedico(medico);
-                c.save();
-                paciente.getConsejos().add(c);
-                return ok(Json.toJson(c));
-            }
-        }).thenApply(result -> result);
+    public Result formulario(Long idP){
+        final Form<Consejo> form = formFactory.form(Consejo.class);
+        Paciente paciente = Paciente.find.byId(idP);
+        return ok(consejoCrear.render(paciente, form));
     }
+    public CompletionStage<Result> darConsejo(Long idP){
+
+        final Form<Consejo> form = formFactory.form(Consejo.class);
+        Form<Consejo> completedForm = form.bindFromRequest();
+        Consejo e = completedForm.get();
+        return CompletableFuture.supplyAsync(() -> Paciente.find.byId(idP),dbContext)
+                .thenApply(pac -> {
+                    if(pac == null){
+                        return notFound("No existe el paciente");
+                    }
+                    else{
+                        if(pac.getHistorial() == null){
+                            pac.inicializarHistorial();
+                            pac.getHistorial().save();
+                        }
+                        e.setPaciente(pac);
+                        pac.getConsejos().add(e);
+                        e.save();
+                        final Form<Entrada> forma = formFactory.form(Entrada.class);
+                        return ok(paciente.render("",pac,forma));
+                    }
+                });
+    }
+
+
 }

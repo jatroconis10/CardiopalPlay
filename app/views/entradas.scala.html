@@ -1,0 +1,229 @@
+@import play.data.Form
+@import utils.ReporteMediciones
+@(title:String, paciente: Paciente, entradas: List[Entrada])
+
+@main(title,null){
+    <div class="container bootstrap snippet">
+        <div class="row">
+            <div class="main-content">
+                    <!-- NAV TABS -->
+                <ul class="nav nav-tabs nav-tabs-custom-colored tabs-iconized">
+                    <li class="active"><a href="#" aria-expanded="true"><i class="fa fa-user"></i> Perfil</a></li>
+                    <li class=""><a href="@controllers.routes.PacienteController.darMedicionesEn(paciente.getId())"aria-expanded="false"><i class="fa fa-rss"></i> Alertas Recientes</a></li>
+                    <li class=""><a href="@controllers.routes.PacienteController.formMarcapasos(paciente.getId())" aria-expanded="false"><i class="fa fa-gear"></i> Ajustes de Marcapaso</a></li>
+                </ul>
+                    <!-- END NAV TABS -->
+                <div class="tab-content profile-page">
+                        <!-- PROFILE TAB CONTENT -->
+                    <div class="tab-pane profile active" id="profile-tab">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="user-info-left">
+                                    <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="Profile Picture">
+                                    <h2>@paciente.getNombres() @paciente.getApellidos() <i class="fa fa-circle green-font online-icon"></i><sup class="sr-only">online</sup></h2>
+                                    <div class="contact">
+                                        <a href="@controllers.routes.MedicoController.formulario(paciente.getId())" class="btn btn-block btn-danger"><i class="fa fa-envelope-o"></i> Enviar Consejo</a>
+                                        <li class="divider"></li>
+                                        <a href="#" class="btn btn-block btn-success"><i class="fa fa-trash"></i> Eliminar Paciente</a>
+                                        <ul class="list-inline social">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="user-info-right">
+                                    <div class="basic-info">
+                                        <h3><i class="fa fa-square"></i> Basic Information</h3>
+                                        <p class="data-row">
+                                            <span class="data-name">Username</span>
+                                            <span class="data-value">@paciente.getNombres() @paciente.getApellidos()</span>
+                                        </p>
+                                        <p class="data-row">
+                                            <span class="data-name">Sexo</span>
+                                            <span class="data-value">@paciente.getSexo()</span>
+                                        </p>
+                                        <p class="data-row">
+                                            <span class="data-name">Ultima alerta</span>
+                                            <span class="data-value">2 hours ago</span>
+                                        </p>
+                                    </div>
+                                    <div class="contact_info">
+                                        <h3><i class="fa fa-square"></i> Historial del Paciente</h3>
+                                        <p class="data-row">
+                                        @if({paciente.getHistorial()} == null) {
+                                            <p>El paciente no tiene entradas</p>
+                                        }
+                                        @for(entrada <- entradas){
+                                            <tr>
+                                            <p>Descripción: @entrada.getDescripcion()</p>
+                                            </tr>
+                                        }
+                                        <a class="button btn-success btn-block" onclick="$('#target').toggle();">
+                                            <i class="fa fa-level-down"></i>Añadir entrada
+                                        </a>
+                                        <div id="target" style="display: none" >
+                                        @helper.form(action = routes.PacienteController.createEntrada(paciente.getId())) {
+                                            <div class="container">
+                                                <div class="row">
+                                                    <h3>Entrada nueva a historial</h3>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col-md-6">
+                                                        <div class="widget-area no-padding blank">
+                                                            <div class="status-upload">
+                                                                <form>
+                                                                    <ul>
+                                                                        <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Audio"><i class="fa fa-music"></i></a></li>
+                                                                        <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Video"><i class="fa fa-video-camera"></i></a></li>
+                                                                        <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Sound Record"><i class="fa fa-microphone"></i></a></li>
+                                                                        <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>
+                                                                    </ul>
+                                                                    <button type="submit" class="btn btn-success green"><i class="fa fa-share"></i> Enviar</button>
+                                                                </form>
+                                                            </div><!-- Status Upload  -->
+                                                        </div><!-- Widget Area -->
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                                    <div class="notas">
+                                        <h3><i class="fa fa-square"></i> Notas Personales</h3>
+                                        <p>Dramatically facilitate proactive solutions whereas professional intellectual capital. Holisticly utilize competitive e-markets through intermandated meta-services. Objectively.</p>
+                                        <p>Monotonectally foster future-proof infomediaries before principle-centered interfaces. Assertively recaptiualize cutting-edge web services rather than emerging "outside the box" thinking. Phosfluorescently cultivate resource maximizing technologies and user-centric convergence. Completely underwhelm cross functional innovation vis-a-vis.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <!-- END PROFILE TAB CONTENT -->
+
+                        <!-- ACTIVITY TAB CONTENT -->
+                    <div class="tab-pane activity" id="activity-tab">
+                        <ul class="list-unstyled activity-list">
+                                <i class="fa fa-shopping-cart activity-icon pull-left"></i>
+                        </ul>
+                        <p class="text-center more"><a href="#" class="btn btn-custom-primary">View more <i class="fa fa-long-arrow-right"></i></a></p>
+                    </div>
+                        <!-- END ACTIVITY TAB CONTENT -->
+
+                        <!-- SETTINGS TAB CONTENT -->
+                    <div class="tab-pane settings" id="settings-tab">
+                        <form class="form-horizontal" role="form">
+                            <fieldset>
+                                <h3><i class="fa fa-square"></i> Change Password</h3>
+                                <div class="form-group">
+                                    <label for="old-password" class="col-sm-3 control-label">Old Password</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" id="old-password" name="old-password" class="form-control">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="password" class="col-sm-3 control-label">New Password</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" id="password" name="password" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password2" class="col-sm-3 control-label">Repeat Password</label>
+                                    <div class="col-sm-4">
+                                        <input type="password" id="password2" name="password2" class="form-control">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <h3><i class="fa fa-square"></i> Privacy</h3>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox">
+                                    <span>Show my display name</span>
+                                </label>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox">
+                                    <span>Show my birth date</span>
+                                </label>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox">
+                                    <span>Show my email</span>
+                                </label>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox">
+                                    <span>Show my online status on chat</span>
+                                </label>
+                            </fieldset>
+                            <h3><i class="fa fa-square"> </i>Notifications</h3>
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Receive message from administrator</label>
+                                    <ul class="col-sm-7 list-inline">
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-globe"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-globe"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-globe'></i>" data-off-label="<i class='glyphicon glyphicon-globe'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-phone"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-phone"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-phone'></i>" data-off-label="<i class='glyphicon glyphicon-phone'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-envelope"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-envelope"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-envelope'></i>" data-off-label="<i class='glyphicon glyphicon-envelope'></i>"></div></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">New product has been added</label>
+                                    <ul class="col-sm-7 list-inline">
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-off" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-globe"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-globe"></i></span><input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-globe'></i>" data-off-label="<i class='glyphicon glyphicon-globe'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-phone"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-phone"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-phone'></i>" data-off-label="<i class='glyphicon glyphicon-phone'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-envelope"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-envelope"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-envelope'></i>" data-off-label="<i class='glyphicon glyphicon-envelope'></i>"></div></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Product review has been approved</label>
+                                    <ul class="col-sm-7 list-inline">
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-globe"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-globe"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-globe'></i>" data-off-label="<i class='glyphicon glyphicon-globe'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-off" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-phone"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-phone"></i></span><input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-phone'></i>" data-off-label="<i class='glyphicon glyphicon-phone'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-on" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-envelope"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-envelope"></i></span><input type="checkbox" checked="" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-envelope'></i>" data-off-label="<i class='glyphicon glyphicon-envelope'></i>"></div></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Others liked your post</label>
+                                    <ul class="col-sm-7 list-inline">
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-off" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-globe"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-globe"></i></span><input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-globe'></i>" data-off-label="<i class='glyphicon glyphicon-globe'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-off" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-phone"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-phone"></i></span><input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-phone'></i>" data-off-label="<i class='glyphicon glyphicon-phone'></i>"></div></div>
+                                        </li>
+                                        <li>
+                                            <div class="has-switch switch-animate switch-small switch-off" tabindex="0"><div><span class="switch-left"><i class="glyphicon glyphicon-envelope"></i></span><label>&nbsp;</label><span class="switch-right switch-default"><i class="glyphicon glyphicon-envelope"></i></span><input type="checkbox" class="bs-switch switch-small" data-off="default" data-on-label="<i class='glyphicon glyphicon-envelope'></i>" data-off-label="<i class='glyphicon glyphicon-envelope'></i>"></div></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <p class="text-center"><a href="#" class="btn btn-custom-primary"><i class="fa fa-floppy-o"></i> Save Changes</a></p>
+                    </div>
+                        <!-- END SETTINGS TAB CONTENT -->
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+}

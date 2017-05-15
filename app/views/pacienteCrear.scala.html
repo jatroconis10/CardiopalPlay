@@ -5,10 +5,56 @@
 @import helper._
 @main("Formulario paciente",null){
 @helper.form(action = routes.PacienteController.create()) {
-    @helper.inputText(myForm("nombres"))
 
-    @helper.inputText(myForm("apellidos"))
 
-    <input type = "submit" class = "btn-primary" value = "Send">
+    <div class="container">
+        <h1 class="well">Registro de Nuevo Paciente</h1>
+        <div class="col-lg-12 well">
+            <div class="row">
+                <form>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-5 form-group">
+                                @helper.inputText(myForm("nombres"))
+                            </div>
+                            <div class="col-sm-5 form-group">
+                                @helper.inputText(myForm("apellidos"))
+                            </div>
+                            <div class="col-sm-5 form-group">
+                            @helper.inputText(myForm("sexo"))
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <textarea placeholder="Ingrese dirección aquí.." rows="3" class="form-control"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label>Ciudad</label>
+                                <input type="text" placeholder="Ingrese nombre de la Ciudad aquí.." class="form-control">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Barrio</label>
+                                <input type="text" placeholder="Ingrese barrio donde vive aquí.." class="form-control">
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label>Zip</label>
+                                <input type="text" placeholder="Ingrese Código Postal aquí.." class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Numero telefónico</label>
+                            <input type="text" placeholder="Ingrese número telefónico aquí.." class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>
+                            <input type="text" placeholder="Ingrese correo electrónico aquí.." class="form-control">
+                        </div>
+                        <input type = "submit" class = "btn-primary" value = "Send">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 }
 }

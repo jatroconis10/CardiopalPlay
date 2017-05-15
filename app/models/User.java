@@ -21,6 +21,7 @@ public class User implements Subject {
     private final String name;
     private final String image;
     private List<Rol> roles;
+    private final String nombre;
 
     public User(final String userId,
                 final String name,
@@ -28,6 +29,7 @@ public class User implements Subject {
                 String roles) {
         this.userId = userId;
         this.name = name;
+        this.nombre = name.split("@uniandes.edu.co")[0];
 
         this.roles = new ArrayList<>();
         Pattern p = Pattern.compile("\"([^\"]*)\"");
@@ -59,5 +61,5 @@ public class User implements Subject {
     public String getName() {
         return name;
     }
-
+    public String getNombre(){return nombre;}
 }

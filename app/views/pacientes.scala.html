@@ -15,8 +15,7 @@
                                     <tr>
                                         <th><span>User</span></th>
                                         <th><span>Created</span></th>
-                                        <th class="text-center"><span>Status</span></th>
-                                        <th><span>Email</span></th>
+                                        <th class="text-center"><span>Última medición</span></th>
                                         <th>&nbsp;</th>
                                     </tr>
                                 </thead>
@@ -25,25 +24,17 @@
                                     @for(paciente <- pacientes) {
                                     <tr>
                                         <td>
+                                            <a href="@controllers.routes.PacienteController.get({paciente.getId()}.longValue())" style="display:block;height: 100%" class="table-link">
                                             <img src="http://bootdey.com/img/Content/user_1.jpg" alt="">
                                             <a href="#" class="user-link">@paciente.getId()</a>
-                                            <span class="user-subhead">Member</span>
+                                            <span class="user-subhead">@paciente.getNombres() @paciente.getApellidos()</span>
+                                            </a>
                                         </td>
-                                        <td>2013/08/12</td>
+                                        <td>@Calendar.getInstance().getTime()</td>
                                         <td class="text-center">
                                             <span class="label label-default">pending</span>
                                         </td>
-                                        <td>
-                                            <li>@paciente.getNombres()</li>
-                                            <li>@paciente.getApellidos()</li>
-                                        </td>
                                         <td style="width: 20%;">
-                                            <a href="#" class="table-link">
-                                                <span class="fa-stack">
-                                                    <i class="fa fa-square fa-stack-2x"></i>
-                                                    <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
-                                                </span>
-                                            </a>
                                             <a href="#" class="table-link">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>

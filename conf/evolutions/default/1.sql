@@ -12,6 +12,7 @@ create table brazalete (
 
 create table cita (
   id                        bigserial not null,
+  dia                       varchar(255),
   paciente_id               bigint,
   constraint pk_cita primary key (id))
 ;
@@ -80,6 +81,7 @@ create table medico (
   id                        bigserial not null,
   nombres                   varchar(255),
   apellidos                 varchar(255),
+  perm_marcapasos           boolean,
   especializacion           integer,
   constraint ck_medico_especializacion check (especializacion in (0,1)),
   constraint pk_medico primary key (id))
@@ -89,6 +91,7 @@ create table paciente (
   id                        bigserial not null,
   nombres                   varchar(255),
   apellidos                 varchar(255),
+  sexo                      varchar(255),
   constraint pk_paciente primary key (id))
 ;
 

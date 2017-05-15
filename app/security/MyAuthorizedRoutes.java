@@ -1,6 +1,7 @@
 package security;
 
 import static be.objectify.deadbolt.java.filters.Methods.POST;
+import static be.objectify.deadbolt.java.filters.Methods.PUT;
 import static be.objectify.deadbolt.java.utils.TemplateUtils.allOf;
 import static be.objectify.deadbolt.java.utils.TemplateUtils.allOfGroup;
 import static be.objectify.deadbolt.java.filters.Methods.GET;
@@ -69,6 +70,12 @@ public class MyAuthorizedRoutes extends AuthorizedRoutes {
                         filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(SENSORES)))),
                 new AuthorizedRoute(GET,
                         "/paciente/$id<[^/]+>/emergencia",
-                        filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(MEDICO),allOf(PACIENTE)))));
+                        filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(MEDICO),allOf(PACIENTE)))),
+                new AuthorizedRoute(PUT,
+                        "/paciente/$id<[^/]+>/marcapasos",
+                        filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(CARDIOLOGO)))),
+                new AuthorizedRoute(PUT,
+                        "/paciente/$id<[^/]+>/marcapasos/$config<[^/]+>",
+                        filterConstraints.restrict(anyOf(allOf(ADMINISTRADOR),allOf(CARDIOLOGO)))));
     }
 }

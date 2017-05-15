@@ -1,0 +1,28 @@
+@import play.data.Form
+
+@(paciente: Paciente, myForm: Form[Consejo])
+
+@import helper._
+@main("Formulario consejo",null){
+@helper.form(action = routes.MedicoController.darConsejo(paciente.getId())) {
+
+
+    <div class="container">
+        <h1 class="well">Registro de Nuevo Consejo</h1>
+        <div class="col-lg-12 well">
+            <div class="row">
+                <form>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-5 form-group">
+                                @helper.inputText(myForm("descripcion"))
+                            </div>
+                        </div>
+                        <input type = "submit" class = "btn-primary" value = "Send">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+}

@@ -37,6 +37,9 @@ public class Marcapasos extends Model {
 
         this.ultimaFechaModificado = Calendar.getInstance().getTime();
     }
+    public Marcapasos(){
+
+    }
 
     public Long getId() {
         return id;
